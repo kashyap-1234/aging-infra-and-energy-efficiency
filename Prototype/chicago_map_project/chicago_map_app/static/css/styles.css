@@ -1,0 +1,27 @@
+#map {
+    width: 70%;
+    height: 600px;
+    float: left;
+    border: 1px solid black;
+}
+
+#left-placeholder {
+    width: 30%;
+    height: 600px;
+    float: left;
+    background-color: #f9f9f9;
+    border: 1px solid black;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+#bottom-placeholder-1,
+#bottom-placeholder-2 {
+    width: 50%;
+    height: 200px;
+    float: left;
+    background-color: #f0f0f0;
+    border: 1px solid black;
+    padding: 10px;
+    box-sizing: border-box;
+}
