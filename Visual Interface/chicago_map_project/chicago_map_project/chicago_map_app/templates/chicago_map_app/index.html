@@ -1,0 +1,63 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chicago Map Visualization</title>
+
+    <!-- Leaflet.js CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+    <h1>Chicago Map Visualization</h1>
+
+    <!-- Map Container -->
+    <div id="map"></div>
+
+    <!-- Controls Section -->
+    <div id="controls">
+        <label for="building-age-slider">Building Age:</label>
+        <input type="range" id="building-age-slider" min="0" max="100" step="1" value="0">
+        <span id="building-age-value">0</span>+
+
+        <label for="feature-dropdown">Filter by Feature:</label>
+        <select id="feature-dropdown">
+            <option value="Building Area">Building Area</option>
+            <option value="GHG Emissions (Metric Tons CO2e)">GHG Emissions</option>
+            <option value="Natural Gas Use (kBtu)">Natural Gas Use</option>
+            <option value="Electricity Use (kBtu)">Electricity Use</option>
+        </select>
+    </div>
+
+    <!-- Charts Section -->
+    <div class="chart-container">
+        <!-- Scatter/Bar Chart -->
+        <div id="scatter-chart" class="chart">
+            <canvas id="scatterChartCanvas"></canvas>
+        </div>
+        <!-- ZIP Code Details -->
+        <div id="zip-details" class="chart">
+            <h3>Details for ZIP Code: <span id="zip-code">N/A</span></h3>
+            <ul id="zip-stats">
+                <li>Average Building Area: N/A</li>
+                <li>Average GHG Emissions: N/A</li>
+                <li>Average Natural Gas Use: N/A</li>
+                <li>Average Electricity Use: N/A</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Leaflet.js -->
+    <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Custom JavaScript -->
+    <script src="{% static 'js/scripts.js' %}"></script>
+</body>
+</html>
