@@ -139,3 +139,15 @@ select {
         width: 100%;
     }
 }
+
+#scatterCanvas, #barChartCanvas {
+    border: 1px solid #ddd;
+    padding: 10px;
+    background-color: #f9f9f9;
+}
+
+.chart-container {
+    display: flex;
+    justify-content: space-between;
+}
+
