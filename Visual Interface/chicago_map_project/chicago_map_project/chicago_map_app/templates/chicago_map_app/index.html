@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chicago Map Visualization</title>
+    <title>Aging Infra and Energy Efficiency</title>
 
     <!-- Leaflet CSS -->
     <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
@@ -14,6 +14,11 @@
     <!-- Leaflet Heatmap Plugin -->
     <script src="https://unpkg.com/leaflet.heat/dist/leaflet-heat.js"></script>
 
+    <script src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css" />
+
+
     <!-- Load Static Tag -->
     {% load static %}
 
@@ -21,7 +26,7 @@
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
 </head>
 <body>
-    <h1>Chicago Map Visualization</h1>
+    <h1>Aging Infra and Energy Efficiency</h1>
     
     <div id="map" style="height: 500px;"></div>
     
@@ -37,9 +42,10 @@
                 <option value="Electricity Use">Electricity Use</option>
                 <option value="Natural Gas Use">Natural Gas Use</option>
                 <option value="GHG Emissions">GHG Emissions</option>
-            </select>            
+            </select>
         </div>
     </div>
+    
 
     <div class="visualization" style="display: flex; justify-content: space-between; align-items: center;">
         <!-- Scatter Chart -->

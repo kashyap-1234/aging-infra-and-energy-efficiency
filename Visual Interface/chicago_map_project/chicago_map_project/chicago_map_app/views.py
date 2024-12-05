@@ -49,12 +49,12 @@ def get_filtered_data(request):
         filtered_data = data[data['Year Built'] >= min_year_built]
 
         if filtered_data.empty:
-            return JsonResponse([], safe=False)
+            return JsonResponse({"heatmap": [], "scatter": []}, safe=False)
 
-        # Filter relevant columns for heatmap
-        heatmap_data = filtered_data[['Latitude', 'Longitude', feature_column]].dropna()
+        # Prepare heatmap data, include RPS for intensity
+        heatmap_data = filtered_data[['Latitude', 'Longitude', feature_column, 'RPS']].dropna()
 
-        # Prepare data for scatter plot as well
+        # Prepare scatter plot data (can also be used for bar chart)
         scatter_plot_data = (
             filtered_data[['Building Area', feature_column]]
             .groupby('Building Area')
@@ -62,21 +62,18 @@ def get_filtered_data(request):
             .reset_index()
         )
 
-        # Combine both sets of data into a response
+        # Combine data into the response
         response_data = {
             "heatmap": heatmap_data.to_dict(orient='records'),
             "scatter": scatter_plot_data.to_dict(orient='records'),
         }
 
-        # Debugging log
-        print("Heatmap Data:", heatmap_data.head())
-        print("Scatter Plot Data:", scatter_plot_data.head())
-
         return JsonResponse(response_data, safe=False)
 
     except Exception as e:
         print(f"Error in get_filtered_data: {e}")
-        return JsonResponse({"error": "An unexpected error occurred"}, status=500)
+        return JsonResponse({"error": str(e)}, status=500)
+
 
 # API endpoint to get details for a specific ZIP code
 def get_zip_details(request):

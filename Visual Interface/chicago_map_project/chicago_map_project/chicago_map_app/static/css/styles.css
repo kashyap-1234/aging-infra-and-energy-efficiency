@@ -112,6 +112,46 @@ select {
     color: #555;
 }
 
+/* Legends Section */
+.info.legend {
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    font-size: 12px;
+    line-height: 1.5;
+    color: #2c3e50;
+}
+
+.interpretation-legend {
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    font-size: 12px;
+    color: #2c3e50;
+    margin-bottom: 10px;
+}
+
+.legend-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.legend-table th,
+.legend-table td {
+    border: 1px solid #ddd;
+    padding: 5px;
+    text-align: left;
+}
+
+.legend-table th {
+    background-color: rgba(240, 240, 240, 0.8);
+    font-weight: bold;
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
     #controls {
@@ -150,4 +190,3 @@ select {
     display: flex;
     justify-content: space-between;
 }
-

@@ -96,26 +96,63 @@ function updateHeatmap(buildingAge, feature) {
                 return;
             }
 
-            const heatmapData = data.heatmap.map((item) => [
-                parseFloat(item.Latitude),
-                parseFloat(item.Longitude),
-                parseFloat(item[feature]) || 0,
-            ]);
+            // Normalize RPS values for intensity scaling
+            const maxRPS = Math.max(...data.heatmap.map((item) => parseFloat(item.RPS) || 0));
+            const minRPS = Math.min(...data.heatmap.map((item) => parseFloat(item.RPS) || 0));
 
-            // Remove existing heatmap layer
+            // Create a marker cluster group
+            const markers = L.markerClusterGroup();
+
+            // Add markers based on data
+            data.heatmap.forEach((item) => {
+                const intensity = (parseFloat(item.RPS) - minRPS) / (maxRPS - minRPS) || 0;
+                const color = intensity > 0.8 ? 'red' : intensity > 0.5 ? 'orange' : 'green';
+
+                const circleMarker = L.circleMarker([item.Latitude, item.Longitude], {
+                    radius: 10 + intensity * 10, // Size increases with intensity
+                    fillColor: color,
+                    color: color,
+                    fillOpacity: 0.6,
+                });
+
+                // Define the tooltip without 'Building Area'
+                circleMarker.bindPopup(`<b>RPS:</b> ${item.RPS}`);
+                markers.addLayer(circleMarker);
+            });
+
+            // Clear previous markers
             if (heatmapLayer) {
                 map.removeLayer(heatmapLayer);
             }
 
-            // Add new heatmap layer
-            heatmapLayer = L.heatLayer(heatmapData, {
-                radius: 20,
-                blur: 15,
-                maxZoom: 15,
-            }).addTo(map);
+            heatmapLayer = markers;
+            map.addLayer(heatmapLayer);
         })
         .catch((error) => console.error("Error updating heatmap:", error));
 }
+
+// // Add legend to the map
+// const legend = L.control({ position: 'bottomright' });
+
+// legend.onAdd = function () {
+//     const div = L.DomUtil.create('div', 'info legend');
+//     const grades = [0, 0.5, 0.8]; // Define thresholds for intensities
+//     const colors = ['green', 'orange', 'red']; // Corresponding colors
+
+//     div.innerHTML = '<h4>RPS Intensity</h4>';
+//     for (let i = 0; i < grades.length; i++) {
+//         div.innerHTML +=
+//             '<i style="background:' +
+//             colors[i] +
+//             '"></i> ' +
+//             (grades[i] * 100) +
+//             (grades[i + 1] ? '&ndash;' + grades[i + 1] * 100 + '<br>' : '+');
+//     }
+//     return div;
+// };
+
+// legend.addTo(map);
+
 
 // Function to update scatter plot
 function updateScatterPlot(buildingAge, feature) {
@@ -166,7 +203,7 @@ function updateBarChart(buildingAge, feature) {
 
             // Update bar chart
             barChart.data.labels = barLabels;
-            barChart.data.datasets[0].label = `Average ${feature}`;
+            barChart.data.datasets[0].label = `Average EUI`;
             barChart.data.datasets[0].data = barData;
             barChart.update();
         })
@@ -221,3 +258,106 @@ const initialBuildingAge = slider.value;
 updateHeatmap(initialBuildingAge, initialFeature);
 updateScatterPlot(initialBuildingAge, initialFeature);
 updateBarChart(initialBuildingAge, initialFeature);
+
+// Add a legend to the map
+const legend = L.control({ position: 'bottomright' });
+
+legend.onAdd = function () {
+    // Create the legend container
+    const div = L.DomUtil.create('div', 'info legend');
+    
+    // Apply inline styles directly to avoid CSS conflicts
+    div.style.background = 'white';
+    div.style.padding = '10px';
+    div.style.border = '1px solid black';
+    div.style.borderRadius = '5px';
+    div.style.boxShadow = '0 2px 5px rgba(0,0,0,0.3)'; // Add a subtle shadow
+    div.style.fontSize = '12px';
+    div.style.lineHeight = '18px';
+
+    // Add a title for the legend
+    div.innerHTML = '<h4 style="margin: 0; text-align: center;">RPS Intensity</h4>';
+
+    // Define grades and colors
+    const grades = [0, 50, 80]; // RPS thresholds
+    const colors = ['green', 'orange', 'red']; // Corresponding colors
+
+    // Generate legend items dynamically
+    for (let i = 0; i < grades.length; i++) {
+        div.innerHTML += `
+            <div style="display: flex; align-items: center; margin: 5px 0;">
+                <i style="
+                    background: ${colors[i]};
+                    width: 15px;
+                    height: 15px;
+                    display: inline-block;
+                    margin-right: 10px;
+                    border-radius: 50%;
+                    "></i>
+                ${grades[i]}${grades[i + 1] ? `–${grades[i + 1]}` : '+'}
+            </div>
+        `;
+    }
+
+    return div;
+};
+
+// Add the legend to the map
+legend.addTo(map);
+
+// Add RPS Interpretation Legend
+const rpsInterpretationLegend = L.control({ position: 'bottomright' });
+
+rpsInterpretationLegend.onAdd = function () {
+    const div = L.DomUtil.create('div', 'info interpretation-legend');
+
+    // Apply inline styles for white background and formatting
+    div.style.background = 'white';
+    div.style.padding = '10px';
+    div.style.border = '1px solid black';
+    div.style.borderRadius = '5px';
+    div.style.boxShadow = '0 2px 5px rgba(0,0,0,0.3)';
+    div.style.fontSize = '12px';
+    div.style.lineHeight = '18px';
+    div.style.overflowY = 'auto'; // Handle large content with scrolling
+
+    // Add a title for the legend
+    div.innerHTML = `
+        <h4 style="margin: 0; text-align: center;">RPS Interpretation</h4>
+        <table class="legend-table" style="width: 100%; border-collapse: collapse; margin-top: 10px;">
+            <thead>
+                <tr style="background: rgba(240, 240, 240, 0.8);">
+                    <th style="border: 1px solid #ddd; padding: 5px; text-align: left;">RPS Range</th>
+                    <th style="border: 1px solid #ddd; padding: 5px; text-align: left;">Priority</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td style="border: 1px solid #ddd; padding: 5px;">RPS ≥ 50</td>
+                    <td style="border: 1px solid #ddd; padding: 5px;">Critical</td>
+                </tr>
+                <tr>
+                    <td style="border: 1px solid #ddd; padding: 5px;">25 ≤ RPS &lt; 50</td>
+                    <td style="border: 1px solid #ddd; padding: 5px;">High</td>
+                </tr>
+                <tr>
+                    <td style="border: 1px solid #ddd; padding: 5px;">0 ≤ RPS &lt; 25</td>
+                    <td style="border: 1px solid #ddd; padding: 5px;">Moderate</td>
+                </tr>
+                <tr>
+                    <td style="border: 1px solid #ddd; padding: 5px;">-25 ≤ RPS &lt; 0</td>
+                    <td style="border: 1px solid #ddd; padding: 5px;">Low</td>
+                </tr>
+                <tr>
+                    <td style="border: 1px solid #ddd; padding: 5px;">RPS &lt; -25</td>
+                    <td style="border: 1px solid #ddd; padding: 5px;">Efficient</td>
+                </tr>
+            </tbody>
+        </table>
+    `;
+
+    return div;
+};
+
+// Add the updated legend to the map
+rpsInterpretationLegend.addTo(map);
