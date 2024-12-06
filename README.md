@@ -104,3 +104,17 @@ Scatter and bar charts are refreshed using Chart.js with data relevant to user i
 Legends dynamically adjust based on data ranges.
 Interactive tooltips provide detailed information about individual markers or regions.
 
+## Usage
+
+### Exploring Heatmaps
+- Use the **Building Age Slider** to filter infrastructure based on the year built.
+- Select a **Feature** (e.g., electricity use, natural gas use) from the dropdown to update the heatmap.
+
+### Analyzing Charts
+- The **Scatter Plot** displays the relationship between building area and the selected feature.
+- The **Bar Chart** shows aggregated averages for the selected feature.
+
+### Understanding Legends
+- The **RPS Intensity Legend** provides insights into relative performance scores.
+- The **RPS Interpretation Table** explains priority levels based on RPS score.
+
