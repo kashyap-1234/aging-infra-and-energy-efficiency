@@ -86,3 +86,21 @@ Provides an easy-to-understand legend for interpreting RPS values:
    python manage.py runserver
 
 5. Access the application: Open your browser and navigate to `http://127.0.0.1:8000`
+
+## How It Works
+
+- ### Data Loading: 
+The backend loads cleaned datasets containing building details, energy consumption metrics, and geospatial data.
+
+- ### Filtering and Aggregation:
+User inputs (e.g., building age and selected feature) are passed to Django views.
+Data is filtered, aggregated, and returned as JSON responses to the frontend.
+
+- ### Dynamic Visualization:
+Heatmaps are updated using Leaflet.js to show energy inefficiency hotspots.
+Scatter and bar charts are refreshed using Chart.js with data relevant to user input.
+
+- ### Legends and Tooltips:
+Legends dynamically adjust based on data ranges.
+Interactive tooltips provide detailed information about individual markers or regions.
+
