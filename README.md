@@ -72,3 +72,21 @@ Provides an easy-to-understand legend for interpreting RPS values:
 1. Clone the repository:
    ```bash
    git clone https://github.com/username/Aging-Infra-and-Energy-Efficiency.git
+
+2. Install Python dependencies:
+  ```bash
+  pip install -r requirements.txt
+
+
+
+
+
+
+
+
+
+
+
+
+
+
