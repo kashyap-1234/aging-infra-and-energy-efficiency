@@ -74,5 +74,15 @@ Provides an easy-to-understand legend for interpreting RPS values:
    git clone https://github.com/username/Aging-Infra-and-Energy-Efficiency.git
 
 2. Install Python dependencies:
-  ```bash
-  pip install -r requirements.txt
+   ```bash
+   pip install -r requirements.txt
+
+3. Run database migrations:
+   ```bash
+   python manage.py migrate
+
+4. Start the development server:
+   ```bash
+   python manage.py runserver
+
+5. Access the application: Open your browser and navigate to `http://127.0.0.1:8000`
